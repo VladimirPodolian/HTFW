@@ -1,0 +1,12 @@
+services:
+  api:
+    image: wg-automation
+    command: tox -e py39-api --
+    volumes:
+      - ./.tox/.tmp/allure/api_tests:/.tox/.tmp/allure/api_tests
+
+  ui:
+    image: wg-automation
+    command: tox -e py39-ui --
+    volumes:
+      - ./.tox/.tmp/allure/ui_tests:/.tox/.tmp/allure/ui_tests

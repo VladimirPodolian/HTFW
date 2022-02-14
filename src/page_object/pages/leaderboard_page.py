@@ -61,10 +61,7 @@ def get_team_info(team_data):
     :param team_data: dict object from Rest.get_clan_rewards request
     :return: dict object with parsed data
     """
-    # FIXME remove [:2] after following issue resolved:
-    # https://github.com/VladimirPodolyan/HTFW/issues/2
-    # https://github.com/VladimirPodolyan/HTFW/issues/3
-    team_with_available_data = [item for item in team_data['teams'] if item['team']][:2]
+    team_with_available_data = [item for item in team_data['teams'] if item['team']]
     random_id = randint(0, len(team_with_available_data)-1)
     available_data = team_with_available_data[random_id]
     return {
