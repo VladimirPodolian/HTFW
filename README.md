@@ -8,16 +8,16 @@ Reported bugs on the page - [link](https://github.com/VladimirPodolyan/HTFW/issu
 # Tests executing:
 
 ## Docker
-### Image
-From root directory run `docker build -t wg-automation .` After it's finished you can run automation. 
+### General:
+Install and start [docker](https://www.docker.com/) in your computer.
 
 ### UI automation:
-With the command `docker-compose run --rm ui`
+Start by command `docker-compose run --rm tests tox -e py39-ui --`
 
 Tests are running in `4 threads` by default.
 
 ### API automation:
-With the command `docker-compose run --rm api`
+Start by command `docker-compose run --rm tests tox -e py39-api --`
 
 ## Local:
 ### UI automation:
@@ -30,16 +30,16 @@ You can install `Tox` with the `pip3 install tox` command.
 It also requires the presence of `chromderiver` in the `PATH` environment variable.
 For MacOS, `chromderiver` can be installed with `brew install chromedriver`
 
-With the command `tox -e py39-ui --`
+Start by command `tox -e py39-ui --`
 
 Tests are running in `headless mode` and in `4 threads` by default.
 
 ### API automation:
-With the command `tox -e py39-api --`
+Start by command `tox -e py39-api --`
 
 ---
 
 # Allure report:
-Allure report can be generated after `local` and `docker` automation runs by:
+Allure report can be generated after `local` or `docker` automation by:
 - `allure serve .tox/.tmp/allure/ui_tests` for ui automation
 - `allure serve .tox/.tmp/allure/api_tests` for api automation

@@ -19,7 +19,7 @@ def chrome_options(request):
     options = ChromeOptions()
     if request.config.getoption('headless'):
         options.headless = True
-        # Following for docker support
+        # Following options are for docker support
         options.add_argument('--disable-extensions')
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
