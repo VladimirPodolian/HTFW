@@ -24,21 +24,25 @@ from src.page_object.pages.leaderboard_page import (
 
 @pytest.fixture
 def leaderboard_page():
+    """ Opens default leaderboard page """
     return LeaderboardPage().open_page()
 
 
 @pytest.fixture
 def specified_echelon(request):
+    """ Opens specified echelon page. Value given from `indirect` arg of `parametrize` """
     return LeaderboardPage().open_page(url=echelons_data[request.param]['url'])
 
 
 @pytest.fixture
 def random_echelon():
+    """ Opens random echelon page  """
     return LeaderboardPage().open_page(url=echelons_data[choice(all_echelons_types)]['url'])
 
 
 @pytest.fixture(params=echelons_data, ids=all_echelons_types)
 def all_echelons_regular_clan_data(request):
+    """ All echelons with random clan data """
     size, start, stop, url = parse_echelon_data(echelons_data[request.param])
     clan_data = choice(request.node.uiapi.get_clans(size=size, gte=start, lte=stop))
     team_data = request.node.uiapi.get_clan_rewards(clan_data['clan']['id'])
@@ -47,6 +51,7 @@ def all_echelons_regular_clan_data(request):
 
 @pytest.fixture
 def all_echelons_pages_with_clan_data(all_echelons_regular_clan_data):
+    """ All echelons pages with random clan data """
     page = LeaderboardPage().open_page(url=all_echelons_regular_clan_data['page_url'])
     if all_echelons_regular_clan_data['row_id'] > DEFAULT_PAGE_SIZE:  # Load all rows
         page.table.scroll_to_table()
@@ -96,6 +101,7 @@ class TestLeaderboardSearch:
 
     @pytest.fixture()
     def unranked_clan(self, request, random_echelon):
+        """ Get random clan and check that him not ranked """
         case = random_string(length=(2, 2))
         all_ranked_clans_data = request.node.uiapi.get_clans(size=RANKED_CLANS_COUNT)
         all_ranked_clans_names = [item['clan']['name'] for item in all_ranked_clans_data]
@@ -200,14 +206,14 @@ class TestLeaderboardClanPopup:
             LeaderboardTable().scroll_to_table()
         return page
 
-    @pytest.mark.xfail(reason='https://github.com/VladimirPodolyan/HTFW/issues/3')
+    @pytest.mark.xfail(reason='Flaky test: https://github.com/VladimirPodolyan/HTFW/issues/2 & 3')
     def test_clan_popup_expand_rewards(self, clan_with_rewards_page, clan_data_with_rewards, request):
         """ Expand available rewards of selected clan in popup """
         clan_data = clan_data_with_rewards['leader_info']['clan']
 
         clan_popup = clan_with_rewards_page.table.open_clan(clan_data['name'])
         elements_count_before_expand = clan_popup.all_rows.get_elements_count()
-        clan_popup.expand_button.click().wait_element_hidden()
+        clan_popup.expand_rewards()
         elements_count_after_expand = clan_popup.all_rows.get_elements_count()
         assert all(
             (
@@ -250,13 +256,14 @@ class TestLeaderboardClanPopup:
                     clan_popup.get_clan_points(),
                 )))
 
+    @pytest.mark.xfail(reason='Flaky test: https://github.com/VladimirPodolyan/HTFW/issues/2 & 3')
     def test_clan_popup_reward_info(self, all_echelons_regular_clan_data, all_echelons_pages_with_clan_data):
         """
         Reward info (tournament/clan_tag/team_name/efficient/points) in the clan popup
         should be visible and accurate the api info
         """
         data = all_echelons_regular_clan_data['leader_info']
-        clan_popup = LeaderboardTable().open_clan(clan_name=data['clan']['name'])
+        clan_popup = LeaderboardTable().open_clan(clan_name=data['clan']['name']).expand_rewards()
         assert_that(
             (
                 data['team']['tournament_name'],

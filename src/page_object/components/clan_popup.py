@@ -1,3 +1,5 @@
+import time
+
 from framework.web_element import WebElement
 
 
@@ -79,3 +81,16 @@ class ClanPopup(WebElement):
 
     def get_team_points_by_row_id(self, row_id):
         return int(self.points_by_id(row_id).get_text().replace(' ', ''))
+
+    def expand_rewards(self, timeout=10):
+        """
+        Trying to expand all rewards by 'see moore' button.
+
+        :param timeout: timeout to stop trying to expand rewards
+        :return: self object
+        """
+        start_time = time.time()
+        while timeout > (time.time() - start_time) and self.expand_button.is_available():
+            self.expand_button.click()
+        assert not self.expand_button.is_available(), 'Expand button still presence!'
+        return self

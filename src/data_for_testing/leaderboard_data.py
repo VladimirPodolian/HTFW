@@ -35,8 +35,6 @@ echelons_data = {
     },
 }
 
-all_echelons_urls = list(map(lambda data: data['url'], echelons_data.values()))
-all_echelons_titles = list(map(lambda data: data['title'], echelons_data.values()))
 all_echelons_types = list(echelons_data.keys())
 
 injections = {
