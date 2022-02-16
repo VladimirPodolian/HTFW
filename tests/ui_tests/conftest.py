@@ -54,7 +54,7 @@ def pytest_runtest_makereport(item, call):
     Original signature:
       https://docs.pytest.org/en/6.2.x/_modules/_pytest/hookspec.html#pytest_runtest_makereport
 
-    Following code is and edited example from:
+    Following code is an edited example from:
       https://github.com/pytest-dev/pytest-html/blob/master/docs/user_guide.rst#extra-content
     """
     outcome = yield

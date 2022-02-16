@@ -1,10 +1,10 @@
 import time
 
-from framework.utils import log
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
+from framework.utils import log, cut_log_data
 from framework.web_driver import WebDriver
 
 
@@ -62,7 +62,7 @@ class WebElement:
         if wait:
             self.wait_element(silent=True)
         if not silent:
-            log(f'Type text {text} into "{self.name}"')
+            log(f'Type text {cut_log_data(text)} into "{self.name}"')
         self.element.send_keys(text)
         return self
 
@@ -70,7 +70,7 @@ class WebElement:
         if wait:
             self.wait_element(silent=True)
         if not silent:
-            log(f'Type text "{text}" into "{self.name}"')
+            log(f'Type text "{cut_log_data(text)}" into "{self.name}"')
         for letter in str(text):
             self.element.send_keys(letter)
             time.sleep(sleep_gap)
